@@ -1,23 +1,6 @@
 package main
 
-func handleRegistration(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/register" {
-		http.Error(w, "404 not found", http.StatusNotFound)
-		return
-	}
-
-	switch r.Method {
-	case "POST":
-
-	default:
-		http.Error(w, "method not supported", http.Status)
-	}
-
-}
-
-func handleLogin(w http.ResponseWriter, r *http.Request) {
-
-}
+import "net/http"
 
 func main() {
 	hub := NewHub()

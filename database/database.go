@@ -17,30 +17,31 @@ type Database struct {
 	db *sql.DB
 }
 
-var DB Database
+var DB *sql.DB
 
-func InitDB() (Database, error) {
+func InitDB() (*sql.DB, error) {
 	connInfo := fmt.Sprintf("host=%s port=%d user=%s"+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", connInfo)
 	if err != nil {
-		return DB, err
+		return nil, err
 	}
 
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		return DB, err
+		return nil, err
 	}
+	db.SetMaxIdleConns(10)
 
 	fmt.Println("Successfully connected to postgres!")
 
-	DB.db = db
+	DB = db
 	return DB, nil
 }
 
-func (db Database) saveUser() error {
-
+func GetDB() *sql.DB {
+	return DB
 }
