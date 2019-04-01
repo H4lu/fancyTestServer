@@ -1,8 +1,8 @@
 package user
 
 import (
-	"database"
 	"errors"
+	"fancyTestServer/database"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -38,7 +38,7 @@ func (m *UserModel) setPassword(password string) error {
 
 func getUser(email string) (UserModel, error) {
 	db := database.GetDB()
-	sqlStatement := `SELECT email,password_hash FROM users WHERE email=$1`
+	sqlStatement := `SELECT id,email,password_hash FROM users WHERE email=$1`
 	user, err := db.Exec(sqlStatement, email)
 	return user, err
 }
