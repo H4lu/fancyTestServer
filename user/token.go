@@ -1,15 +1,18 @@
 package user
 
 import (
+	"encoding/hex"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-const privateKey []byte = []byte("MHcCAQEEIHgfULIcCnEGuL1f1lNhP9dhIupvsYv1OVJjIc3J3jrFoAoGCCqGSM49AwEHoUQDQgAETFSC75YsHVIS02G7Z1t0Au81F0J5ljlD6e9JnTQ3eY2VxYBcs8DwGrQp6VlcYjKXF4Eiy2oy8nbRfsiZZjisow==")
+var privateKey = []byte("MHcCAQEEIHgfULIcCnEGuL1f1lNhP9dhIupvsYv1OVJjIc3J3jrFoAoGCCqGSM49AwEHoUQDQgAETFSC75YsHVIS02G7Z1t0Au81F0J5ljlD6e9JnTQ3eY2VxYBcs8DwGrQp6VlcYjKXF4Eiy2oy8nbRfsiZZjisow==")
+
+var privateKeyString = hex.EncodeToString(privateKey)
 
 func createToken(m *User) (string, error) {
-	token := jwt.New(jwt.SigningMethodECDSA)
+	token := jwt.New(jwt.SigningMethodRSA)
 
 	token.Claims["email"] = m.Email
 	token.Claims["password"] = m.Password
@@ -18,8 +21,8 @@ func createToken(m *User) (string, error) {
 	return tokenString, err
 }
 
-func checkToken(token string) error {
-	token, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+func checkToken(token *jwt.Token) error {
+	token, err := jwt.Parse(privateKeyString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(privateKey), nil
 	})
 	if err == nil && token.Valid {
